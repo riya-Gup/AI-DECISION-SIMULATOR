@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Decision Simulator | Monte Carlo Life Choices</title>
+<link rel="stylesheet" href="style.css">
+<!-- Plotly CDN (must load before our scripts) -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+<h1>🤖 AI Decision Simulator</h1>
+<p class="subtitle">Simulate 10,000 possible futures · Quantify risk · Choose wisely</p>
+
+<label>What is your decision?</label>
+<select id="decision-select" onchange="toggleSections()">
+    <option value="" disabled selected>-- Select --</option>
+    <option value="job-switch">🔄 Job Switch</option>
+    <option value="higher-studies">🎓 Higher Studies</option>
+    <option value="startup">🚀 Startup</option>
+    <option value="move-city">🏙️ Move to New City</option>
+</select>
+
+<!-- ========= JOB SWITCH ========= -->
+<div id="section-job-switch" class="hidden">
+    <h2>💼 Job Switch Scenario</h2>
+    <div class="card">
+        <b>A. Current Job</b>
+        <div class="grid-2">
+            <div class="field"><label>Current Salary ($)</label><input type="number" id="job_cur_sal" placeholder="50000" value="50000"></div>
+            <div class="field"><label>Annual Growth (%)</label><input type="number" id="job_cur_growth" placeholder="5" value="5"></div>
+        </div>
+        <div class="field"><label>Layoff Risk (%)</label><input type="number" id="job_cur_layoff" placeholder="10" value="10"></div>
+    </div>
+    <div class="card">
+        <b>B. New Job</b>
+        <div class="grid-2">
+            <div class="field"><label>Offered Salary ($)</label><input type="number" id="job_off_sal" placeholder="65000" value="65000"></div>
+            <div class="field"><label>Annual Growth (%)</label><input type="number" id="job_off_growth" placeholder="8" value="8"></div>
+        </div>
+        <div class="field"><label>Layoff Risk (%)</label><input type="number" id="job_off_layoff" placeholder="5" value="5"></div>
+    </div>
+</div>
+
+<!-- ========= HIGHER STUDIES ========= -->
+<div id="section-higher-studies" class="hidden">
+    <h2>🎓 Higher Studies Scenario</h2>
+    <div class="card">
+        <div class="grid-2">
+            <div class="field"><label>Current Salary ($)</label><input type="number" id="study_cur_sal" placeholder="50000" value="50000"></div>
+            <div class="field"><label>Tuition Cost ($)</label><input type="number" id="study_tuition" placeholder="15000" value="15000"></div>
+        </div>
+        <div class="field"><label>Study Duration: <span id="dur">2</span> years</label><input type="range" id="study_duration" min="1" max="4" value="2" oninput="document.getElementById('dur').innerText=this.value"></div>
+        <div class="grid-2">
+            <div class="field"><label>Expected Salary After Study ($)</label><input type="number" id="study_new_sal" placeholder="80000" value="80000"></div>
+            <div class="field"><label>Placement %: <span id="place">80</span>%</label><input type="range" id="study_placement" min="0" max="100" value="80" oninput="document.getElementById('place').innerText=this.value"></div>
+        </div>
+        <div class="field"><label>Loan Interest (%): <span id="int">8</span>%</label><input type="range" id="study_loan_int" min="0" max="15" value="8" oninput="document.getElementById('int').innerText=this.value"></div>
+        <div class="field"><label>Risk Tolerance</label><select id="study_risk_tolerance"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>
+    </div>
+</div>
+
+<!-- ========= STARTUP ========= -->
+<div id="section-startup" class="hidden">
+    <h2>🚀 Startup Scenario</h2>
+    <div class="card"><b>Option A: Continue Job</b><div class="field"><label>Current Salary ($)</label><input type="number" id="startup_cur_sal" placeholder="60000" value="60000"></div></div>
+    <div class="card">
+        <b>Option B: Startup</b>
+        <div class="grid-2">
+            <div class="field"><label>Initial Investment ($)</label><input type="number" id="startup_investment" placeholder="20000" value="20000"></div>
+            <div class="field"><label>Monthly Burn Rate ($)</label><input type="number" id="startup_burn" placeholder="2000" value="2000"></div>
+        </div>
+        <div class="field"><label>Success %: <span id="succ">30</span>%</label><input type="range" id="startup_success_prob" min="0" max="100" value="30" oninput="document.getElementById('succ').innerText=this.value"></div>
+        <div class="grid-2">
+            <div class="field"><label>Expected Revenue at Exit ($)</label><input type="number" id="startup_revenue" placeholder="120000" value="120000"></div>
+            <div class="field"><label>Time to Profit: <span id="profit">2</span> years</label><input type="range" id="startup_time_profit" min="1" max="5" value="2" oninput="document.getElementById('profit').innerText=this.value"></div>
+        </div>
+        <div class="field"><label>Industry Risk</label><select id="startup_industry_risk"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+    </div>
+</div>
+
+<!-- ========= MOVE CITY ========= -->
+<div id="section-move-city" class="hidden">
+    <h2>🏙️ Move to New City Scenario</h2>
+    <div class="card">
+        <div class="grid-2">
+            <div class="field"><label>Current Salary ($)</label><input type="number" id="city_cur_sal" placeholder="60000" value="60000"></div>
+            <div class="field"><label>New Salary ($)</label><input type="number" id="city_new_sal" placeholder="75000" value="75000"></div>
+        </div>
+        <div class="field"><label>Cost of Living Index (current=100): <span id="col">120</span></label><input type="range" id="city_col_index" min="50" max="200" value="120" oninput="document.getElementById('col').innerText=this.value"></div>
+        <div class="grid-2">
+            <div class="field"><label>Relocation Cost ($)</label><input type="number" id="city_reloc_cost" placeholder="5000" value="5000"></div>
+            <div class="field"><label>Salary Growth Difference (%): <span id="growth">5</span>%</label><input type="range" id="city_growth_diff" min="-10" max="20" value="5" oninput="document.getElementById('growth').innerText=this.value"></div>
+        </div>
+        <div class="field"><label>Job Risk</label><select id="city_job_risk"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+    </div>
+</div>
+
+<button id="calculateBtn">📊 Calculate & Simulate</button>
+
+<!-- Results and chart containers -->
+<div id="results"></div>
+<div id="chart"></div>
+<div id="loadingSpinner" style="display:none; text-align:center; margin:20px;"><div class="loading"></div><p style="color:#cbd5e1;">Running 10,000 simulations...</p></div>
+</div>
+
+<script>
+function toggleSections() {
+    const decision = document.getElementById("decision-select").value;
+    const sections = ["job-switch", "higher-studies", "startup", "move-city"];
+    sections.forEach(id => {
+        const el = document.getElementById("section-" + id);
+        if (el) el.classList.add("hidden");
+    });
+    if (decision && document.getElementById("section-" + decision)) {
+        document.getElementById("section-" + decision).classList.remove("hidden");
+    }
+}
+toggleSections();
+
+function showSpinner(show) {
+    document.getElementById("loadingSpinner").style.display = show ? "block" : "none";
+    document.getElementById("calculateBtn").disabled = show;
+}
+</script>
+
+<script src="js/engine.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/ai_agents.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+    if (typeof Plotly === 'undefined') {
+        document.getElementById('chart').innerHTML = '<p style="color:#ef4444; text-align:center;">❌ Plotly library failed to load. Check internet connection and refresh.</p>';
+    } else {
+        console.log("Plotly loaded successfully");
+    }
+});
+</script>
+</body>
+</html>
