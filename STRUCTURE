@@ -1,0 +1,9 @@
+AI_DECISION_SIMULATOR/
+├── index.html
+├── style.css
+├── data/market_trends.json
+└── js/
+├── engine.js # Monte Carlo core
+├── charts.js # Plotly histograms
+├── main.js # UI & simulation
+└── ai_agents.js # Rule insights
