@@ -1,0 +1,21 @@
+{
+  "industries": {
+    "IT": { "avg_growth": 0.10, "volatility": 0.05, "layoff_prob": 0.04 },
+    "Manufacturing": { "avg_growth": 0.06, "volatility": 0.03, "layoff_prob": 0.03 },
+    "Finance": { "avg_growth": 0.09, "volatility": 0.04, "layoff_prob": 0.02 },
+    "Healthcare": { "avg_growth": 0.08, "volatility": 0.03, "layoff_prob": 0.01 },
+    "Retail": { "avg_growth": 0.05, "volatility": 0.06, "layoff_prob": 0.07 }
+  },
+  "macro": [
+    { "year": 0, "inflation_rate": 0.05, "recession_prob": 0.10 },
+    { "year": 1, "inflation_rate": 0.04, "recession_prob": 0.15 },
+    { "year": 2, "inflation_rate": 0.04, "recession_prob": 0.20 },
+    { "year": 3, "inflation_rate": 0.03, "recession_prob": 0.10 },
+    { "year": 4, "inflation_rate": 0.03, "recession_prob": 0.05 }
+  ],
+  "risk_factors": {
+    "low": 0.7,
+    "medium": 1.0,
+    "high": 1.3
+  }
+}
